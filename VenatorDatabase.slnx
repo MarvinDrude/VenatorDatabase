@@ -10,5 +10,7 @@
     <File Path="README.md" />
     <File Path="SECURITY.md" />
   </Folder>
+  <Project Path="VenatorDatabase.Abstractions/VenatorDatabase.Abstractions.csproj" />
+  <Project Path="VenatorDatabase.Storage/VenatorDatabase.Storage.csproj" />
   <Project Path="VenatorDatabase/VenatorDatabase.csproj" />
 </Solution>
