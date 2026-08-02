@@ -1,0 +1,43 @@
+<Project>
+   <PropertyGroup>
+      <TargetFramework>net11.0</TargetFramework>
+      <LangVersion>Preview</LangVersion>
+      <ImplicitUsings>enable</ImplicitUsings>
+      <Nullable>enable</Nullable>
+
+      <Version>1.0.0</Version>
+      <FileVersion>1.0.0</FileVersion>
+      <AssemblyVersion>1.0.0</AssemblyVersion>
+   </PropertyGroup>
+
+   <PropertyGroup>
+      <Authors>Marvin Drude</Authors>
+      <Copyright>Copyright (c) Marvin Drude</Copyright>
+      <PackageLicenseExpression>MIT</PackageLicenseExpression>
+      <PackageReadmeFile>README.md</PackageReadmeFile>
+      <PackageTags>Database Analytical Database</PackageTags>
+      <PublishRepositoryUrl>true</PublishRepositoryUrl>
+      <RepositoryUrl>https://github.com/MarvinDrude/VenatorDatabase</RepositoryUrl>
+      <IncludeSymbols>true</IncludeSymbols>
+      <IncludeSource>true</IncludeSource>
+      <EmbedUntrackedSources>true</EmbedUntrackedSources>
+      <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+      <PackageIcon>logo_small.png</PackageIcon>
+   </PropertyGroup>
+
+   <PropertyGroup>
+      <IsPackable Condition="'$(IsPackable)' == ''">false</IsPackable>
+   </PropertyGroup>
+
+   <ItemGroup Condition="'$(IsPackable)' == 'true'">
+      <None Include="$(MSBuildThisFileDirectory)Resources\logo_small.png" Pack="true" PackagePath="\" Visible="false"/>
+      <None Include="$(MSBuildThisFileDirectory)README.md" Pack="true" PackagePath="\" Visible="false"/>
+   </ItemGroup>
+
+   <ItemGroup>
+      <PackageReference Include="Microsoft.SourceLink.GitHub">
+         <PrivateAssets>all</PrivateAssets>
+         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
+   </ItemGroup>
+</Project>
