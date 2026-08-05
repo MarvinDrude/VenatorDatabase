@@ -39,19 +39,22 @@ database_root/
 ║ Var  │ RowGroupId    : (8 Bytes, long)                   ║ -> usually just incrementing identifier
 ║ Var  │ RowCount      : (4 Bytes, int)                    ║
 ╟──────────────────────────────────────────────────────────╢
-║ PHYSICAL EXTENTS (Where does this live in .bin?)         ║
+║ PHYSICAL EXTENTS (Where does this live in .bin?)         ║ -> N Many
 ╟──────────────────────────────────────────────────────────╢
-║ Var  │ ExtentCount   : E (2 Bytes, ushort)               ║ -> How many 4096 byte blocks
+║ Var  │ ExtentCount   : E (2 Bytes, ushort)               ║ -> How many 4096 * M byte blocks
 ║ Var  │ [ Offset (8 Bytes) | BytesUsed (4 Bytes) ] x E    ║
 ╟──────────────────────────────────────────────────────────╢
 ║ COLUMN STATS (Min/Max Zone Maps for Data Skipping)       ║
 ╟──────────────────────────────────────────────────────────╢
 ║ Var  │ COLUMN 0: [ ID | Type | Nulls | Min | Max ]       ║
 ║ Var  │ COLUMN 1: [ ID | Type | Nulls | Min | Max ]       ║
-║ Var  │ ... (Repeated N times for all columns)            ║
+║ Var  │ ... (Repeated N times for all columns)            ║ -> Needs to be different for strings or ints etc
 ╠══════════════════════════════════════════════════════════╣
 ║ ROW GROUP 1                                              ║
 ╟──────────────────────────────────────────────────────────╢
 ║ ... (Same structure as above)                            ║
 ╚══════════════════════════════════════════════════════════╝
 ```
+
+## Schema.ven
+
