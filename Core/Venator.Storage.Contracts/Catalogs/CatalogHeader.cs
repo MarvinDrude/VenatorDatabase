@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Runtime.InteropServices;
 
-namespace Venator.Storage.Contracts.Catalogs.Descriptors;
+namespace Venator.Storage.Contracts.Catalogs;
 
 [StructLayout(LayoutKind.Sequential, Pack = 1, Size = 16)]
 [DebuggerDisplay("CatalogHeader(Count = {TableCount,nq})")]

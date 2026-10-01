@@ -1,13 +1,15 @@
 ﻿using System.Diagnostics;
 using System.Runtime.InteropServices;
+using Beskar.Memory.Flags;
+using Venator.Storage.Contracts.Ids;
 
-namespace Venator.Storage.Contracts.Catalogs.Descriptors;
+namespace Venator.Storage.Contracts.Catalogs;
 
-[StructLayout(LayoutKind.Sequential, Pack = 1)]
+[StructLayout(LayoutKind.Sequential, Pack = 42)]
 [DebuggerDisplay("TableHeader({Identifier,nq})")]
 public readonly struct TableHeader
 {
-   public readonly ulong Identifier;
+   public readonly TableId Identifier;
 
    public readonly ulong CreatedEpoch;
    public readonly ulong LastModifiedEpoch;
@@ -19,4 +21,6 @@ public readonly struct TableHeader
    public readonly ushort SortKeyCount;
 
    public readonly ushort NameByteLength;
+
+   public readonly PackedBools32 Flags;
 }
