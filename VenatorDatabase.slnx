@@ -13,6 +13,7 @@
   <Folder Name="/Core/">
     <Project Path="Core/Venator.Engine/Venator.Engine.csproj" />
     <Project Path="Core/Venator.Server/Venator.Server.csproj" />
+    <Project Path="Core/Venator.Storage.Contracts/Venator.Storage.Contracts.csproj" />
     <Project Path="Core/Venator.Storage/Venator.Storage.csproj" />
     <Project Path="Core/Venator/Venator.csproj" />
   </Folder>
