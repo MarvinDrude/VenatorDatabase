@@ -14,4 +14,7 @@ public readonly struct ColumnHeader
 
    public readonly ushort NameByteLength;
    public readonly ushort DefaultValueByteLength;
+
+   public bool IsNullable => Flags.Get(0);
+   public bool HasDefaultValue => Flags.Get(1);
 }
