@@ -25,9 +25,14 @@ public readonly struct WayfinderBlock
    public readonly uint BlockSize;
 
    /// <summary>
-   /// Block id where the catalog ids are stored
+   /// Block id where the catalog block ids are stored
    /// </summary>
-   public readonly BlockId CatalogBlockId;
+   public readonly BlockId CatalogRootBlockId;
+
+   /// <summary>
+   /// Block id where the bitmap of free blocks are stored
+   /// </summary>
+   public readonly BlockId FreeBitmapRootBlockId;
 
    /// <summary>
    /// Total blocks occupied by this db
