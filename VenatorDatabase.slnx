@@ -15,6 +15,7 @@
     <Project Path="Core/Venator.Server/Venator.Server.csproj" />
     <Project Path="Core/Venator.Storage.Contracts/Venator.Storage.Contracts.csproj" />
     <Project Path="Core/Venator.Storage/Venator.Storage.csproj" />
+    <Project Path="Core/Venator.Utilities/Venator.Utilities.csproj" />
     <Project Path="Core/Venator/Venator.csproj" />
   </Folder>
 </Solution>

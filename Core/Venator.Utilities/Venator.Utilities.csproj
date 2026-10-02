@@ -1,15 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
 
     <ItemGroup>
       <PackageReference Include="Beskar.Memory" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="..\Venator.Utilities\Venator.Utilities.csproj" />
+      <PackageReference Include="System.IO.Hashing" />
     </ItemGroup>
 
 </Project>

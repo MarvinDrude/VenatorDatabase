@@ -1,4 +1,5 @@
 ﻿using System.Runtime.InteropServices;
+using Venator.Storage.Contracts.Constants;
 
 namespace Venator.Storage.Contracts.Common;
 
@@ -6,10 +7,18 @@ namespace Venator.Storage.Contracts.Common;
 /// Protecting us against write corruption,
 /// commits are done to alpha and beta in an alternating pattern
 /// </summary>
-[StructLayout(LayoutKind.Sequential, Pack = 1, Size = 4096 * 2)]
+[StructLayout(LayoutKind.Explicit, Pack = 1, Size = StorageConstants.WayfinderSize * 2)]
 public readonly struct DualWayfinderBlock
 {
+   /// <summary>
+   /// Alpha channel version of the wayfinder
+   /// </summary>
+   [FieldOffset(0)]
    public readonly WayfinderBlock WayfinderAlpha;
 
+   /// <summary>
+   /// Beta channel version of the wayfinder
+   /// </summary>
+   [FieldOffset(StorageConstants.WayfinderSize)]
    public readonly WayfinderBlock WayfinderBeta;
 }
