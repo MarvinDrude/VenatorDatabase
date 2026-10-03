@@ -20,9 +20,9 @@ public static class StorageConstants
    /// </summary>
    public const uint FormatVersion = 1;
 
-   public const int SectorSize = 4096;
-   public const int WayfinderSize = SectorSize;
+   public const int WayfinderSize = 4096;
+   public const int DualWayfinderSize = WayfinderSize * 2;
 
    public const long WayfinderAlphaOffset = 0;
-   public const long WayfinderBetaOffset = WayfinderAlphaOffset + SectorSize;
+   public const long WayfinderBetaOffset = WayfinderAlphaOffset + WayfinderSize;
 }
