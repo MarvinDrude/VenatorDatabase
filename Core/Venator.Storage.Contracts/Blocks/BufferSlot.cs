@@ -16,8 +16,6 @@ public struct BufferSlot
    [FieldOffset(12)]
    public PackedBools16 Flags;
 
-
-
    public bool IsDirty
    {
       get => Flags.Get(0);

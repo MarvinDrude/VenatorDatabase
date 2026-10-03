@@ -1,9 +1,65 @@
 # todo
 
+Very early passion project. Nothing to see here yet.
+A columnar analytical one file db inspired by ClickHouse but for simple medium-sized projects all local.
+
+Some rules:
+- No AI output (Solely for research and maybe some tests/benchmarks)
+- No big external libraries - C# first
+- Understand everything
+
+Planning (roughly):
+
+End of 2026:
+- Solid core of Storage Engine
+- File Engine
+- Schema & Catalog
+
+2027
+- Solid Query Planer & Executor
+- Merge & Compact Engine
+- C# first-querying & writing
+- Bulk Data
+- Actually usable
+
+2028
+- Networking Layer
+- Protocol Engine for remote access
+- SQL Language Parsing (minimal)
+
+2029
+- Auth & Security layer
+- Encryption
+
+2030
+- Overall improvements and readying Beta
+
+## Short Working Desc
+A simple one-file analytical columnar database with all the topics that interest me a lot:
+- Memory & CPU Management
+- Text & Parsing
+- Networking
+- Caching
+- Files
+- Databases
+- Analytics
+
+## Future Feature board
+
+- Storage Engine
+- Schema & Catalog
+- Merge / Compact Engine
+- File Engine
+- Query Executor
+- Query Planer
+- Networking Layer
+- Protocol Engine
+- Auth & Security
+- Bulk Data
 
 ## File Setup
 
-- Dual Wayfinders
+- Dual Wayfinders (vs )
   - Wayfinder A
   - Wayfinder B
 
