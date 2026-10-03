@@ -1,8 +1,9 @@
-﻿using Venator.Storage.Contracts.Ids;
+﻿using System.Runtime.CompilerServices;
+using Venator.Storage.Contracts.Ids;
 
 namespace Venator.Storage.Contracts.Interfaces;
 
-public interface IBlockStorage
+public interface IBlockStorage : IDisposable
 {
    /// <summary>
    /// The size of each block in bytes
@@ -17,12 +18,8 @@ public interface IBlockStorage
    /// <summary>
    /// Get block bytes by block id
    /// </summary>
-   public void ReadBlock(BlockId blockId, ReadOnlySpan<byte> destination);
-
-   /// <summary>
-   /// Get block bytes of block id and blockCount amount after that
-   /// </summary>
-   public void ReadBlockRange(BlockId blockId, uint blockCount, ReadOnlySpan<byte> destination);
+   [MethodImpl(MethodImplOptions.AggressiveInlining)]
+   public void ReadBlock(BlockId blockId, Span<byte> destination);
 
    /// <summary>
    /// Write block bytes of a given block id
@@ -34,4 +31,9 @@ public interface IBlockStorage
    /// </summary>
    /// <returns></returns>
    public BlockId AllocateBlock();
+
+   /// <summary>
+   /// Flush to disk
+   /// </summary>
+   public void Flush();
 }
