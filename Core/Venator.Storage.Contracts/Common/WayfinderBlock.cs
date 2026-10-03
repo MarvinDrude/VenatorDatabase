@@ -1,4 +1,4 @@
-﻿using System.Runtime.InteropServices;
+using System.Runtime.InteropServices;
 using Beskar.Memory.Flags;
 using Venator.Storage.Contracts.Constants;
 using Venator.Storage.Contracts.Ids;
@@ -100,6 +100,30 @@ public readonly struct WayfinderBlock
       FormatVersion = StorageConstants.FormatVersion;
       TimestampUtc = Timing.GetTimestamp();
       Checksum = ComputeChecksum();
+   }
+
+   public WayfinderBlock(
+      ulong magicNumber,
+      ulong sequenceNumber,
+      Flags256 flags,
+      uint blockSize,
+      BlockId catalogRootBlockId,
+      BlockId freeBitmapRootBlockId,
+      uint totalBlocks,
+      ulong timestampUtc,
+      uint formatVersion,
+      ulong checksum)
+   {
+      MagicNumber = magicNumber;
+      SequenceNumber = sequenceNumber;
+      Flags = flags;
+      BlockSize = blockSize;
+      CatalogRootBlockId = catalogRootBlockId;
+      FreeBitmapRootBlockId = freeBitmapRootBlockId;
+      TotalBlocks = totalBlocks;
+      TimestampUtc = timestampUtc;
+      FormatVersion = formatVersion;
+      Checksum = checksum;
    }
 
    private ulong ComputeChecksum()

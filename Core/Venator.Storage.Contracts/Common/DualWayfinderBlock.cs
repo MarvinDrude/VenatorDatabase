@@ -1,4 +1,4 @@
-﻿using System.Runtime.InteropServices;
+using System.Runtime.InteropServices;
 using Venator.Storage.Contracts.Constants;
 
 namespace Venator.Storage.Contracts.Common;
@@ -21,4 +21,10 @@ public readonly struct DualWayfinderBlock
    /// </summary>
    [FieldOffset(StorageConstants.WayfinderSize)]
    public readonly WayfinderBlock WayfinderBeta;
+
+   public DualWayfinderBlock(WayfinderBlock wayfinderAlpha, WayfinderBlock wayfinderBeta)
+   {
+      WayfinderAlpha = wayfinderAlpha;
+      WayfinderBeta = wayfinderBeta;
+   }
 }

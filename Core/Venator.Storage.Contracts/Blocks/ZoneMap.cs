@@ -1,4 +1,4 @@
-﻿using System.Runtime.CompilerServices;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using Beskar.Memory.Flags;
 
@@ -24,6 +24,18 @@ public unsafe struct ZoneMap
       {
          min[..Math.Min(min.Length, 16)].CopyTo(new Span<byte>(minPtr, 16));
          max[..Math.Min(max.Length, 16)].CopyTo(new Span<byte>(maxPtr, 16));
+      }
+   }
+
+   public ZoneMap(in ZoneMap other, uint nullCount, uint rowCount)
+   {
+      NullCount = nullCount;
+      RowCount = rowCount;
+
+      fixed (byte* srcMin = other._minRaw, srcMax = other._maxRaw, dstMin = _minRaw, dstMax = _maxRaw)
+      {
+         Buffer.MemoryCopy(srcMin, dstMin, 16, 16);
+         Buffer.MemoryCopy(srcMax, dstMax, 16, 16);
       }
    }
 
