@@ -1,5 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 using Beskar.Memory.Flags;
+using Venator.Storage.Contracts.Enums.Internal;
 using Venator.Storage.Contracts.Ids;
 
 namespace Venator.Storage.Contracts.Blocks;
@@ -15,6 +16,12 @@ public struct BufferSlot
 
    [FieldOffset(12)]
    public PackedBools16 Flags;
+
+   [FieldOffset(14)]
+   public SlotState State;
+
+   [FieldOffset(15)]
+   public byte UsageMarker;
 
    public bool IsDirty
    {

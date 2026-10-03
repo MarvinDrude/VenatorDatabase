@@ -25,6 +25,11 @@ public interface IBlockStorage
    public void ReadBlockRange(BlockId blockId, uint blockCount, ReadOnlySpan<byte> destination);
 
    /// <summary>
+   /// Write block bytes of a given block id
+   /// </summary>
+   public void WriteBlock(BlockId blockId, ReadOnlySpan<byte> data);
+
+   /// <summary>
    /// Appends new block (can be a reclaimed one, or appended at the end)
    /// </summary>
    /// <returns></returns>
