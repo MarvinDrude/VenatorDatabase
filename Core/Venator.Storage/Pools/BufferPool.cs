@@ -10,7 +10,7 @@ using Venator.Storage.Leases;
 
 namespace Venator.Storage.Pools;
 
-public sealed class BufferPool : IDisposable
+public sealed unsafe class BufferPool : IDisposable
 {
    private readonly IBlockStorage _storage;
 

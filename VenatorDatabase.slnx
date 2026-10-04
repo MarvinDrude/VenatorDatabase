@@ -18,4 +18,7 @@
     <Project Path="Core/Venator.Utilities/Venator.Utilities.csproj" />
     <Project Path="Core/Venator/Venator.csproj" />
   </Folder>
+  <Folder Name="/Experiments/">
+    <Project Path="Experiments/Venator.Experiments/Venator.Experiments.csproj" />
+  </Folder>
 </Solution>
