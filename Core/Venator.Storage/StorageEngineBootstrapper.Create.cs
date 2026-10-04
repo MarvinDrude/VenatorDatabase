@@ -7,7 +7,7 @@ public static partial class StorageEngineBootstrapper
 {
    private static StorageEngine Create(
       SafeFileHandle handle,
-      StorageAlignmentInfo alignmentInfo,
+      in StorageAlignmentInfo alignmentInfo,
       StorageEngineOptions options)
    {
       // TODO: MDE
