@@ -67,10 +67,10 @@ public static partial class DirectFile
    private static SafeFileHandle OpenLinux(string path)
    {
       // Linux x86_64 / ARM64 constants from <fcntl.h>
-      const int oRdwr   = 0x0002;
-      const int oCreat  = 0x0040; // 0100 octal
+      const int oRdwr = 0x0002;
+      const int oCreat = 0x0040; // 0100 octal
       const int oDirect = 0x4000; // 040000 octal (Bypasses Linux Page Cache)
-      const int oDsync  = 0x1000; // 010000 octal (Data sync to physical flash)
+      const int oDsync = 0x1000; // 010000 octal (Data sync to physical flash)
 
       // Permissions: 0666 (rw-rw-rw- masked by umask)
       const int mode = 438;
