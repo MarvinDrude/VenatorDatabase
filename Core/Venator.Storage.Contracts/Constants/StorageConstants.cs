@@ -16,6 +16,11 @@ public static class StorageConstants
    public const uint CatalogMagicNumber = 0x54414356;
 
    /// <summary>
+   /// VBIT
+   /// </summary>
+   public const uint BitmapMagicNumber = 0x54494256;
+
+   /// <summary>
    /// The Format version
    /// </summary>
    public const uint FormatVersion = 1;

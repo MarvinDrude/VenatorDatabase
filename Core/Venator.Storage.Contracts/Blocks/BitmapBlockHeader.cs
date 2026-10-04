@@ -13,5 +13,13 @@ public readonly struct BitmapBlockHeader(
     uint freeBlockCount,
     uint searchHintWordIndex)
 {
+    public readonly uint MagicNumber = magicNumber;
+    public readonly uint Version = version;
 
+    public readonly BlockId NextBitmapBlockId = nextBitmapBlockId;
+    public readonly uint FirstTrackedBlockId = firstTrackedBlockId;
+    public readonly uint TotalTrackedBlocks = totalTrackedBlocks;
+
+    public readonly uint FreeBlockCount = freeBlockCount;
+    public readonly uint SearchHintWordIndex = searchHintWordIndex;
 }
