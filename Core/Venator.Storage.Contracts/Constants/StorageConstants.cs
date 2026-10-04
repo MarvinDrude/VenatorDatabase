@@ -24,6 +24,7 @@ public static class StorageConstants
    /// The Format version
    /// </summary>
    public const uint FormatVersion = 1;
+   public const uint BitmapVersion = 1;
 
    public const int WayfinderSize = 4096;
    public const int DualWayfinderSize = WayfinderSize * 2;

@@ -66,8 +66,13 @@ public static partial class StorageEngineBootstrapper
 
          var storage = new FileBlockStorage(fileHandle, discoveredBlockSize);
          var bufferPool = new BufferPool(storage, slotCount: options.BufferPoolSlots);
+         var blockAllocator = new BlockAllocator(bufferPool, storage, activeWayfinder.FreeBitmapRootBlockId);
 
-         return new StorageEngine(storage, bufferPool, activeWayfinder);
+         return new StorageEngine(
+            storage,
+            bufferPool,
+            blockAllocator,
+            activeWayfinder);
       }
       finally
       {

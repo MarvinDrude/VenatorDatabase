@@ -2,12 +2,15 @@
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using Microsoft.Win32.SafeHandles;
+using Venator.Storage.Blocks;
+using Venator.Storage.Contracts.Blocks;
 using Venator.Storage.Contracts.Catalogs;
 using Venator.Storage.Contracts.Catalogs.Extensions;
 using Venator.Storage.Contracts.Common;
 using Venator.Storage.Contracts.Common.Extensions;
 using Venator.Storage.Contracts.Constants;
 using Venator.Storage.Contracts.Ids;
+using Venator.Storage.Pools;
 using Venator.Utilities.Files;
 using Venator.Utilities.Hashes;
 
@@ -77,9 +80,38 @@ public static partial class StorageEngineBootstrapper
 
          // lets do the bitmap
          // TODO: refactor to own method
+         NativeMemory.Clear(blockMemory, blockSize);
+         var headerSize = (uint)sizeof(BitmapBlockHeader);
+         var totalTrackableBlocks = (blockSize - headerSize) * 8;
 
+         var bitmapHeader = new BitmapBlockHeader(
+            magicNumber: StorageConstants.BitmapMagicNumber, // "VBIT"
+            version: StorageConstants.BitmapVersion,
+            nextBitmapBlockId: BlockId.Invalid,
+            firstTrackedBlockId: 0,
+            totalTrackedBlocks: totalTrackableBlocks,
+            freeBlockCount: totalTrackableBlocks,
+            searchHintWordIndex: 0);
 
-         return null!;
+         Unsafe.WriteUnaligned(ref MemoryMarshal.GetReference(blockSpan), bitmapHeader);
+
+         var bitmap = new BitmapBlockAccessor(blockSpan);
+         var allocated = bitmap.TryAllocateExtent(blockCount: 3, out var startBlock);
+
+         RandomAccess.Write(handle, blockSpan, (long)blockSize * 2);
+
+         // finish
+         RandomAccess.FlushToDisk(handle);
+
+         var storage = new FileBlockStorage(handle, blockSize);
+         var bufferPool = new BufferPool(storage, slotCount: options.BufferPoolSlots);
+         var allocator = new BlockAllocator(bufferPool, storage, wayfinderAlpha.FreeBitmapRootBlockId);
+
+         return new StorageEngine(
+            storage,
+            bufferPool,
+            allocator,
+            wayfinderAlpha);
       }
       finally
       {
