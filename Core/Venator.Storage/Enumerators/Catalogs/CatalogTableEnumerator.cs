@@ -12,6 +12,9 @@ public ref struct CatalogTableEnumerator(
    private CatalogBlockHeader _catalogHeader = catalogHeader;
    private readonly CatalogHeader _rootBlockHeader = rootBlockHeader;
 
+   /// <summary>
+   /// Important: consume all columns of the previous one
+   /// </summary>
    public bool MoveNext(ref BlockReader reader, out CatalogTableEntry table)
    {
       if (reader.Remaining < Unsafe.SizeOf<TableHeader>())
