@@ -5,6 +5,9 @@ namespace Venator.Utilities.Files;
 
 public static partial class DirectFile
 {
+   /// <summary>
+   /// Opens a file with DIRECT. No OS-Level caching on purpose.
+   /// </summary>
    public static SafeFileHandle Open(string filePath)
    {
       try
@@ -26,8 +29,6 @@ public static partial class DirectFile
          // ignored
       }
 
-      // lets just fallback if there was an error
-      // (I think some environments maybe not allowing it / support it)
       return OpenStandardFallback(filePath);
    }
 

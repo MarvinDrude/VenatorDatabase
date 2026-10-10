@@ -23,7 +23,7 @@ End of 2026:
 - Actually usable
 
 2028
-- Networking Layer
+- Networking Layer (with https://github.com/MarvinDrude/Beskar.Networking)
 - Protocol Engine for remote access
 - SQL Language Parsing (minimal)
 
