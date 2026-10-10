@@ -26,7 +26,8 @@ public ref struct CatalogBlockReader : IDisposable
       RootBlockHeader = _reader.Read<CatalogHeader>().EnsureLittleEndian();
    }
 
-   public CatalogTableEnumerator Tables => new(BlockHeader, RootBlockHeader);
+   public CatalogTableEnumerator Tables
+      => new(BlockHeader, RootBlockHeader);
 
    public void Dispose()
    {
