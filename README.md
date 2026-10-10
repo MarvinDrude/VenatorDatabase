@@ -11,11 +11,11 @@ Some rules:
 Planning (roughly):
 
 End of 2026:
-- Solid core of Storage Engine
 - File Engine
 - Schema & Catalog
 
 2027
+- Solid core of Storage Engine
 - Solid Query Planer & Executor
 - Merge & Compact Engine
 - C# first-querying & writing
