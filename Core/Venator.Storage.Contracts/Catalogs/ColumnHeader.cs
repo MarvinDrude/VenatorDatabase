@@ -11,11 +11,16 @@ public readonly struct ColumnHeader(
    ColumnKind kind,
    PackedBools32 flags,
    ushort nameByteLength,
-   ushort defaultValueByteLength)
+   ushort defaultValueByteLength,
+   EncodingKind encodingType,
+   CompressionKind compressionType)
 {
    public readonly ColumnId Identifier = columnId;
    public readonly ColumnKind Kind = kind;
    public readonly PackedBools32 Flags = flags;
+
+   public readonly EncodingKind EncodingType = encodingType;
+   public readonly CompressionKind CompressionType = compressionType;
 
    public readonly ushort NameByteLength = nameByteLength;
    public readonly ushort DefaultValueByteLength = defaultValueByteLength;

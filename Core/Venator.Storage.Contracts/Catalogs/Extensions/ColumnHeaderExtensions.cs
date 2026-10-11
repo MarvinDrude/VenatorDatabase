@@ -22,7 +22,9 @@ public static class ColumnHeaderExtensions
             kind: (ColumnKind)BinaryPrimitives.ReverseEndianness((byte)header.Kind),
             flags: new PackedBools32(BinaryPrimitives.ReverseEndianness(header.Flags.RawValue)),
             nameByteLength: BinaryPrimitives.ReverseEndianness(header.NameByteLength),
-            defaultValueByteLength: BinaryPrimitives.ReverseEndianness(header.DefaultValueByteLength));
+            defaultValueByteLength: BinaryPrimitives.ReverseEndianness(header.DefaultValueByteLength),
+            encodingType: (EncodingKind)BinaryPrimitives.ReverseEndianness((byte)header.EncodingType),
+            compressionType: (CompressionKind)BinaryPrimitives.ReverseEndianness((byte)header.CompressionType));
       }
    }
 }
