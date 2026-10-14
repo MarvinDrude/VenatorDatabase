@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+using System.Diagnostics.CodeAnalysis;
+using System.Runtime.InteropServices;
 using Venator.Storage.Contracts.Catalogs;
 using Venator.Storage.Contracts.Catalogs.Extensions;
 using Venator.Storage.Contracts.Ids;
@@ -12,8 +13,9 @@ namespace Venator.Storage.Readers.Catalogs;
 public ref struct CatalogBlockReader : IDisposable
 {
    private BlockReader _reader;
-   private readonly ReadOnlySpan<byte> _span;
-   private int _position;
+
+   [UnscopedRef]
+   public ref BlockReader Reader => ref _reader;
 
    public CatalogBlockHeader BlockHeader { get; }
    public CatalogHeader RootBlockHeader { get; }

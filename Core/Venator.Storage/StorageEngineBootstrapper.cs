@@ -1,4 +1,4 @@
-﻿using System.Runtime.CompilerServices;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using Microsoft.Win32.SafeHandles;
 using Venator.Storage.Blocks;
@@ -65,7 +65,7 @@ public static partial class StorageEngineBootstrapper
          BlockSizeValidator.ValidateOrThrow(discoveredBlockSize, alignment);
 
          var storage = new FileBlockStorage(fileHandle, discoveredBlockSize);
-         var bufferPool = new BufferPool(storage, slotCount: options.BufferPoolSlots);
+         var bufferPool = new BufferPool(storage, slotCount: options.BufferPoolSlots, alignment.MemoryAlignment);
          var blockAllocator = new BlockAllocator(bufferPool, storage, activeWayfinder.FreeBitmapRootBlockId);
 
          return new StorageEngine(

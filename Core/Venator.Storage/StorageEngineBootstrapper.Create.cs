@@ -1,4 +1,4 @@
-﻿using System.Buffers.Binary;
+using System.Buffers.Binary;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using Microsoft.Win32.SafeHandles;
@@ -23,10 +23,7 @@ public static partial class StorageEngineBootstrapper
       in StorageAlignmentInfo alignmentInfo,
       StorageEngineOptions options)
    {
-      var blockSize = options.PreferredBlockSize;
-
-      if (blockSize < alignmentInfo.SectorSize)
-         blockSize = alignmentInfo.SectorSize;
+      var blockSize = BlockSizeValidator.DetermineBlockSize(options, alignmentInfo);
 
       var blockMemory = (byte*)NativeMemory.AlignedAlloc(blockSize, alignmentInfo.MemoryAlignment);
       try
@@ -66,13 +63,18 @@ public static partial class StorageEngineBootstrapper
          BinaryPrimitives.WriteUInt16LittleEndian(catChecksumInput[6..8], initialTableCount);
          var catChecksum = XxHashGen.HashToUInt64(catChecksumInput);
 
+         var catalogBlockHeader = new CatalogBlockHeader(BlockId.Invalid);
+         Unsafe.WriteUnaligned(
+            ref MemoryMarshal.GetReference(blockSpan),
+            catalogBlockHeader.EnsureLittleEndian());
+
          var catalogHeader = new CatalogHeader(
             magicNumber: catMagic,
             version: catVersion,
             tableCount: initialTableCount,
             checksum: catChecksum);
          Unsafe.WriteUnaligned(
-            ref MemoryMarshal.GetReference(blockSpan),
+            ref MemoryMarshal.GetReference(blockSpan[sizeof(CatalogBlockHeader)..]),
             catalogHeader.EnsureLittleEndian());
 
          var block1Offset = (long)blockSize * 1;
@@ -104,7 +106,7 @@ public static partial class StorageEngineBootstrapper
          RandomAccess.FlushToDisk(handle);
 
          var storage = new FileBlockStorage(handle, blockSize);
-         var bufferPool = new BufferPool(storage, slotCount: options.BufferPoolSlots);
+         var bufferPool = new BufferPool(storage, slotCount: options.BufferPoolSlots, alignmentInfo.MemoryAlignment);
          var allocator = new BlockAllocator(bufferPool, storage, wayfinderAlpha.FreeBitmapRootBlockId);
 
          return new StorageEngine(
@@ -115,7 +117,7 @@ public static partial class StorageEngineBootstrapper
       }
       finally
       {
-         NativeMemory.Free(blockMemory);
+         NativeMemory.AlignedFree(blockMemory);
       }
    }
 }

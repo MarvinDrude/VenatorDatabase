@@ -1,4 +1,4 @@
-﻿using System.Collections.Concurrent;
+using System.Collections.Concurrent;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using Microsoft.Win32.SafeHandles;
@@ -28,9 +28,10 @@ public sealed unsafe class BufferPool : IDisposable
    public uint BlockSize { get; }
    public int SlotCount { get; }
 
-   public BufferPool(IBlockStorage storage, int slotCount)
+   public BufferPool(IBlockStorage storage, int slotCount, uint memoryAlignment = 4096)
    {
       _storage = storage ?? throw new ArgumentNullException(nameof(storage));
+      ArgumentOutOfRangeException.ThrowIfLessThanOrEqual(slotCount, 0);
 
       SlotCount = slotCount;
       BlockSize = storage.BlockSize;
@@ -50,10 +51,11 @@ public sealed unsafe class BufferPool : IDisposable
          _stripeLocks[i] = new Lock();
       }
 
-      var totalBytes = slotCount * BlockSize;
+      var totalBytes = (nuint)slotCount * BlockSize;
+      var alignment = (nuint)Math.Max(memoryAlignment, 4096u);
 
-      _slab = (byte*)NativeMemory.AlignedAlloc((nuint)totalBytes, 4096);
-      NativeMemory.Clear(_slab, (nuint)totalBytes);
+      _slab = (byte*)NativeMemory.AlignedAlloc(totalBytes, alignment);
+      NativeMemory.Clear(_slab, totalBytes);
    }
 
    [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -147,13 +149,13 @@ public sealed unsafe class BufferPool : IDisposable
 
       while (scans < maxScans)
       {
-         var index = Interlocked.Increment(ref _clockHand) % SlotCount;
+         var index = (int)((uint)Interlocked.Increment(ref _clockHand) % (uint)SlotCount);
          scans++;
 
          ref var slot = ref _slots[index];
 
          if (Volatile.Read(ref slot.PinCount) > 0
-             || slot.State is SlotState.Loading)
+             || slot.State is SlotState.Loading or SlotState.Evicting)
             continue;
 
          if (slot.UsageMarker == 1)
@@ -162,10 +164,17 @@ public sealed unsafe class BufferPool : IDisposable
             continue;
          }
 
+         var victimStripe = index % StripeCount;
+         if (!_stripeLocks[victimStripe].TryEnter())
+            continue;
+
          // claim slot for eviction
-         lock (_stripeLocks[index % StripeCount])
+         try
          {
-            if (slot.PinCount > 0) continue;
+            if (Volatile.Read(ref slot.PinCount) > 0
+                || slot.State is SlotState.Loading or SlotState.Evicting)
+               continue;
+
             slot.State = SlotState.Evicting;
 
             if (slot is { IsDirty: true, BlockId.IsValid: true })
@@ -181,6 +190,10 @@ public sealed unsafe class BufferPool : IDisposable
 
             slot.State = SlotState.Loading;
             return index;
+         }
+         finally
+         {
+            _stripeLocks[victimStripe].Exit();
          }
       }
 
@@ -209,8 +222,27 @@ public sealed unsafe class BufferPool : IDisposable
    [MethodImpl(MethodImplOptions.AggressiveInlining)]
    public Span<byte> GetSlotSpan(int slotIndex)
    {
-      var ptr = _slab + (slotIndex * BlockSize);
+      var ptr = _slab + ((nuint)slotIndex * BlockSize);
       return new Span<byte>(ptr, (int)BlockSize);
+   }
+
+   public void Flush()
+   {
+      for (var i = 0; i < SlotCount; i++)
+      {
+         lock (_stripeLocks[i % StripeCount])
+         {
+            ref var slot = ref _slots[i];
+
+            if (slot is { State: SlotState.Loaded, IsDirty: true, BlockId.IsValid: true })
+            {
+               _storage.WriteBlock(slot.BlockId, GetSlotSpan(i));
+               slot.IsDirty = false;
+            }
+         }
+      }
+
+      _storage.Flush();
    }
 
    public void Dispose()
@@ -218,7 +250,7 @@ public sealed unsafe class BufferPool : IDisposable
       if (_isDisposed) return;
       _isDisposed = true;
 
-      // TODO: should we flush all dirty blocks?
+      Flush();
 
       NativeMemory.AlignedFree(_slab);
    }

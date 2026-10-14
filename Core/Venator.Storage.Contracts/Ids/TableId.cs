@@ -1,11 +1,11 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 
 namespace Venator.Storage.Contracts.Ids;
 
-[StructLayout(LayoutKind.Sequential, Pack = 1)]
+[StructLayout(LayoutKind.Sequential, Pack = 1, Size = 8)]
 [DebuggerDisplay("TableId({Value})")]
-public readonly record struct TableId(ulong Value)
+public readonly record struct TableId(ulong Value) : IComparable<TableId>
 {
    public static readonly TableId Invalid = new(ulong.MaxValue);
 

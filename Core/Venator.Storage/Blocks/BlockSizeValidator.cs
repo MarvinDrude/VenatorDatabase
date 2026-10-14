@@ -1,4 +1,4 @@
-﻿using System.Numerics;
+using System.Numerics;
 using Venator.Storage.Contracts.Constants;
 using Venator.Utilities.Files;
 
@@ -16,8 +16,12 @@ public static class BlockSizeValidator
          return ValidateOrThrow(options.PreferredBlockSize, alignment);
       }
 
-      var target = Math.Max(MaximumBlockSize, alignment.OptimalBlockSize);
-      return BitOperations.RoundUpToPowerOf2(target);
+      var target = Math.Clamp(
+         BitOperations.RoundUpToPowerOf2(alignment.OptimalBlockSize),
+         MinimumBlockSize,
+         MaximumBlockSize);
+
+      return ValidateOrThrow(target, alignment);
    }
 
    public static uint ValidateOrThrow(uint requestedBlockSize, in StorageAlignmentInfo alignment)

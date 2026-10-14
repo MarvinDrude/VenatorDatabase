@@ -1,4 +1,4 @@
-﻿using Venator.Storage.Contracts.Ids;
+using Venator.Storage.Contracts.Ids;
 using Venator.Storage.Pools;
 
 namespace Venator.Storage.Blocks;
@@ -31,9 +31,13 @@ public sealed class BlockAllocator
          using var lease = _bufferPool.AcquireWriteLease(_bitmapRootBlockId);
          var bitmap = new BitmapBlockAccessor(lease.Span);
 
-         return bitmap.TryAllocateSingle(out var recycledBlock)
-            ? recycledBlock
-            : _storage.AllocateBlock();
+         if (bitmap.TryAllocateSingle(out var allocatedBlock))
+         {
+            EnsureStorageCapacity(allocatedBlock.Value + 1);
+            return allocatedBlock;
+         }
+
+         return _storage.AllocateBlock();
       }
    }
 
@@ -46,6 +50,7 @@ public sealed class BlockAllocator
 
          if (bitmap.TryAllocateExtent(count, out BlockId startBlock))
          {
+            EnsureStorageCapacity(startBlock.Value + count);
             return startBlock;
          }
 
@@ -56,6 +61,14 @@ public sealed class BlockAllocator
          }
 
          return firstAppended;
+      }
+   }
+
+   private void EnsureStorageCapacity(ulong requiredTotalBlocks)
+   {
+      while (_storage.TotalBlocks < requiredTotalBlocks)
+      {
+         _storage.AllocateBlock();
       }
    }
 

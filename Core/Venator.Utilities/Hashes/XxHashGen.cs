@@ -1,4 +1,4 @@
-﻿using System.IO.Hashing;
+using System.IO.Hashing;
 using System.Text;
 using Beskar.Memory.Owners;
 
@@ -11,11 +11,11 @@ public static class XxHashGen
    /// </summary>
    public static ulong HashToUInt64(ReadOnlySpan<byte> source, long seed = 0)
    {
-      return XxHash64.HashToUInt64(source, seed);
+      return XxHash3.HashToUInt64(source, seed);
    }
 
    /// <summary>
-   /// Computes the 64-bit XXH§ hash of a given char buffer
+   /// Computes the 64-bit XXH3 hash of a given char buffer
    /// </summary>
    public static ulong HashToUInt64(ReadOnlySpan<char> source, long seed = 0)
    {

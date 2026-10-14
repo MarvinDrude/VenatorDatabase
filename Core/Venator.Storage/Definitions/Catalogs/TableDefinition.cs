@@ -1,4 +1,4 @@
-﻿using System.Collections.Frozen;
+using System.Collections.Frozen;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using Venator.Storage.Contracts.Catalogs;
@@ -27,7 +27,9 @@ public sealed class TableDefinition
       _columnsByName = columns.ToFrozenDictionary(x => x.Name, StringComparer.OrdinalIgnoreCase);
    }
 
-   public static TableDefinition Create(ref BlockReader reader, in CatalogTableEntry entry)
+   public static TableDefinition Create(
+      scoped ref BlockReader reader,
+      scoped in CatalogTableEntry entry)
    {
       var columns = new ColumnDefinition[entry.ColumnCount];
       var columnEnumerator = entry.Columns;

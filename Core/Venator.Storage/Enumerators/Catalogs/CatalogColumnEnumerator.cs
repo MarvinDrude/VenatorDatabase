@@ -1,4 +1,4 @@
-﻿using Venator.Storage.Contracts.Catalogs;
+using Venator.Storage.Contracts.Catalogs;
 using Venator.Storage.Contracts.Catalogs.Extensions;
 using Venator.Storage.Readers.Blocks;
 
@@ -12,7 +12,7 @@ public ref struct CatalogColumnEnumerator(ushort columnCount)
    public readonly ushort RemainingCount => (ushort)(_columnCount - _currentIndex);
    public readonly bool IsCompleted => _currentIndex >= _columnCount;
 
-   public bool MoveNext(ref BlockReader reader, out CatalogColumnEntry column)
+   public bool MoveNext(scoped ref BlockReader reader, out CatalogColumnEntry column)
    {
       if (_currentIndex >= _columnCount)
       {
@@ -33,7 +33,7 @@ public ref struct CatalogColumnEnumerator(ushort columnCount)
       return true;
    }
 
-   public void SkipRemaining(ref BlockReader reader)
+   public void SkipRemaining(scoped ref BlockReader reader)
    {
       while (_currentIndex < _columnCount)
       {

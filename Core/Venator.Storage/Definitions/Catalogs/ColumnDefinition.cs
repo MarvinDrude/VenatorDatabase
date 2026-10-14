@@ -1,4 +1,4 @@
-﻿using System.Text;
+using System.Text;
 using Venator.Storage.Contracts.Catalogs;
 using Venator.Storage.Contracts.Enums;
 using Venator.Storage.Contracts.Ids;
@@ -22,7 +22,7 @@ public sealed class ColumnDefinition
    public bool IsNullable => Header.IsNullable;
    public bool HasDefaultValue => Header.HasDefaultValue;
 
-   public static ColumnDefinition Create(in CatalogColumnEntry entry)
+   public static ColumnDefinition Create(scoped in CatalogColumnEntry entry)
    {
       return new ColumnDefinition()
       {

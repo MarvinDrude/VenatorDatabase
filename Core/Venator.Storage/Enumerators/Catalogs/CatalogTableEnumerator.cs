@@ -1,4 +1,4 @@
-﻿using System.Runtime.CompilerServices;
+using System.Runtime.CompilerServices;
 using Venator.Storage.Contracts.Catalogs;
 using Venator.Storage.Contracts.Catalogs.Extensions;
 using Venator.Storage.Readers.Blocks;
@@ -10,13 +10,19 @@ public ref struct CatalogTableEnumerator(
    CatalogHeader rootBlockHeader)
 {
    private CatalogBlockHeader _catalogHeader = catalogHeader;
-   private readonly CatalogHeader _rootBlockHeader = rootBlockHeader;
+   private ushort _remainingTables = rootBlockHeader.TableCount;
 
    /// <summary>
    /// Important: consume all columns of the previous one
    /// </summary>
-   public bool MoveNext(ref BlockReader reader, out CatalogTableEntry table)
+   public bool MoveNext(scoped ref BlockReader reader, out CatalogTableEntry table)
    {
+      if (_remainingTables == 0)
+      {
+         table = default;
+         return false;
+      }
+
       if (reader.Remaining < Unsafe.SizeOf<TableHeader>())
       {
          if (!_catalogHeader.NextBlockId.IsValid)
@@ -34,6 +40,8 @@ public ref struct CatalogTableEnumerator(
 
       var columns = new CatalogColumnEnumerator(tableHeader.ColumnCount);
       table = new CatalogTableEntry(tableHeader, name, columns);
+
+      _remainingTables--;
 
       return true;
    }
